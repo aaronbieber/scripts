@@ -27,8 +27,8 @@ class ThisMonth:
     def ordsuffix(self, number):
         """Return a number with its ordinal suffix attached (e.g. 22nd).
 
-        Accepts as a parameter, NUMBER, which is the number for which to return the
-        ordinal string.
+        Accepts as a parameter, NUMBER, which is the number for which to 
+        return the ordinal string.
         """
         if 4 <= number <= 20 or 24 <= number <= 30:
             suffix = "th"
@@ -47,18 +47,19 @@ class ThisMonth:
         return date.strftime('%A, the ') + self.ordsuffix(int(date.strftime('%d')))
 
     def get_events(self, calendar_url, event_type):
-        """Return the events occurring this month given a Google Calendar base URL.
+        """Return the events occurring this month given a Google Calendar base
+        URL.
 
         Accepts as parameters:
-          - CALENDAR_URL, which is the base URL of a Google Calendar XML feed. This
-            URL should point to the "full" version of the feed (ending in "/full")
-            and should not include any query string parameters.
-          - EVENT_TYPE, a string indicating the type of event, which will be added to
-            each event dictionary with the key "type".
+          - CALENDAR_URL, which is the base URL of a Google Calendar XML feed. 
+            This URL should point to the "full" version of the feed (ending in 
+            "/full") and should not include any query string parameters.
+          - EVENT_TYPE, a string indicating the type of event, which will be 
+            added to each event dictionary with the key "type".
 
-        Returns a list of dictionaries, where each dictionary is a calendar event
-        having the keys "type", "title", and "when". "Type" and "title" are strings,
-        and "when" is a datetime object.
+        Returns a list of dictionaries, where each dictionary is a calendar 
+        event having the keys "type", "title", and "when". "Type" and "title" 
+        are strings, and "when" is a datetime object.
         """
         today = date.today()
         start_min = '%i-%02i-%02iT00:00:00-04:00' % (today.year, today.month, 1)
@@ -75,7 +76,9 @@ class ThisMonth:
                     'singleevents=true&' +
                     'sortorder=a&' +
                     'fields=entry/title,entry/gd:when&' +
-                    'start-min=%s&start-max=%s') % (calendar_url, start_min, start_max)
+                    'start-min=%s&start-max=%s') % (calendar_url,
+                                                    start_min,
+                                                    start_max)
                 )
 
         soup = BeautifulSoup(events_xml.read())
@@ -84,8 +87,9 @@ class ThisMonth:
                 {
                     'type':  event_type,
                     'title': h.title.string,
-                    'when':  datetime.strptime(h.find('gd:when').get('starttime')[:10],
-                        '%Y-%m-%d')
+                    'when':  datetime.strptime(h.find('gd:when')
+                                                .get('starttime')[:10],
+                                               '%Y-%m-%d')
                     }
                 for h in soup.find_all('entry')
                 ]
