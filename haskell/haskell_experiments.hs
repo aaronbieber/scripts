@@ -49,7 +49,7 @@ piglatin' :: String -> String
 piglatin' word 
     | prefix == "th" ||
       prefix == "qu" = remainder ++ prefix ++ "ay"
-    | otherwise = drop 1 word ++ [head word] ++ "ay"
+    | otherwise = tail word ++ [head word] ++ "ay"
     where prefix    = take 2 word
           remainder = drop 2 word
 
